@@ -1,0 +1,8 @@
+.word-sidebar-wapper {
+  width: 30%;
+  border-right: 1px solid #eaeaea;
+  height: 100%;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+}

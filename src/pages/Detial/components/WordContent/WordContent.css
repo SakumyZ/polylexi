@@ -1,0 +1,33 @@
+.word-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: flex-start;
+}
+
+.word-content-wrapper .content {
+  padding: 0 1.2rem;
+}
+
+.content-item {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.volume-icon {
+  cursor: pointer;
+  margin: 0 1rem;
+}
+
+.content-item .word {
+  cursor: pointer;
+}
+
+.content-item .word:hover {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.copy-icon {
+  margin-left: 1rem;
+}
