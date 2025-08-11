@@ -1,0 +1,20 @@
+.word-content-edit-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 80rem;
+  margin: 0 auto;
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* 隐藏滚动条 */
+.sidebar-content::-webkit-scrollbar {
+  display: none;
+}

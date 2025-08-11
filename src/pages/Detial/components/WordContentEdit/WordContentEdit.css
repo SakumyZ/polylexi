@@ -1,9 +1,0 @@
-.sidebar-content {
-  flex: 1;
-  overflow-y: auto;
-}
-
-/* 隐藏滚动条 */
-.sidebar-content::-webkit-scrollbar {
-  display: none;
-}

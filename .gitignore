@@ -13,6 +13,8 @@ dist-ssr
 dist-electron
 release
 *.local
+out
+resources/covers/*
 
 # Editor directories and files
 .vscode/*
@@ -27,3 +29,6 @@ release
 
 # db
 *.db
+
+.eslintcache
+package-lock.json
