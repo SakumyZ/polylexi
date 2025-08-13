@@ -1,5 +1,9 @@
 .top-nav-bar {
   display: flex;
-  padding: 0.6em 0;
+  height: 6rem;
+  padding: 1rem 2rem;
   gap: 1rem;
+  align-items: center;
+  border-bottom: 1px solid #eaeaea;
+  background: #fafafa;
 }

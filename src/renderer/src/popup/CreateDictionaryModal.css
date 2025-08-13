@@ -24,16 +24,26 @@
 .form-input {
   width: 100%;
   padding: 1rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
+  border: none;
+  border-radius: 8px;
   font-size: 1.4rem;
-  transition: border-color 0.2s ease;
+  background: #f0f0f0;
+  color: #374151;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* 内嵌的拟态效果 */
+  box-shadow:
+    inset -4px -4px 8px rgba(255, 255, 255, 0.8),
+    inset 4px 4px 8px rgba(163, 177, 198, 0.3);
 }
 
 .form-input:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  /* 聚焦时的立体效果 */
+  box-shadow:
+    inset -6px -6px 12px rgba(255, 255, 255, 0.9),
+    inset 6px 6px 12px rgba(163, 177, 198, 0.4),
+    0 0 0 3px rgba(59, 130, 246, 0.2);
+  color: #1f2937;
 }
 
 .cover-upload-section {
@@ -57,9 +67,14 @@
   width: 12rem;
   height: 16rem;
   object-fit: cover;
-  border-radius: 0.8rem;
-  border: 2px solid #e5e7eb;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  border: none;
+  /* 增强的立体阴影效果 */
+  box-shadow:
+    -8px -8px 16px rgba(255, 255, 255, 0.9),
+    -8px -8px 24px rgba(255, 255, 255, 0.6),
+    8px 8px 16px rgba(163, 177, 198, 0.6),
+    8px 8px 24px rgba(163, 177, 198, 0.3);
 }
 
 .remove-cover-btn {
@@ -77,31 +92,50 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* 增加立体效果 */
+  box-shadow:
+    -3px -3px 6px rgba(255, 255, 255, 0.2),
+    3px 3px 6px rgba(239, 68, 68, 0.4),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.3),
+    inset 1px 1px 2px rgba(185, 28, 28, 0.3);
 }
 
 .remove-cover-btn:hover {
   background: #dc2626;
+  transform: scale(1.1);
+  /* 悬停时的增强立体效果 */
+  box-shadow:
+    -4px -4px 8px rgba(255, 255, 255, 0.3),
+    4px 4px 8px rgba(220, 38, 38, 0.5),
+    inset -1px -1px 2px rgba(255, 255, 255, 0.4),
+    inset 1px 1px 2px rgba(153, 27, 27, 0.4);
 }
 
 .upload-area {
   width: 12rem;
   height: 16rem;
-  border: 2px dashed #d1d5db;
-  border-radius: 0.8rem;
+  border: none;
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  background-color: #f9fafb;
-  transition: all 0.2s ease;
+  background: #f0f0f0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* 内嵌的拟态效果 */
+  box-shadow:
+    inset -6px -6px 12px rgba(255, 255, 255, 0.8),
+    inset 6px 6px 12px rgba(163, 177, 198, 0.3);
 }
 
 .upload-area:hover {
-  border-color: #9ca3af;
-  background-color: #f3f4f6;
+  /* 悬停时的立体效果 */
+  box-shadow:
+    inset -8px -8px 16px rgba(255, 255, 255, 0.9),
+    inset 8px 8px 16px rgba(163, 177, 198, 0.4);
+  transform: translateY(-2px);
 }
 
 .upload-icon {

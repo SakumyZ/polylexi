@@ -1,23 +1,32 @@
 .top-search {
   display: flex;
   flex: 1;
+  align-items: center;
 }
 
-/* .search-text-field {
-} */
-
 input[type='text'] {
-  padding: 10px;
+  width: 100%;
+  padding: 1rem;
   border: none;
-  border-radius: 5px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  /* background: #f9f9f9; */
+  border-radius: 8px;
+  font-size: 1.4rem;
+  background: #f0f0f0;
+  color: #374151;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* 内嵌的拟态效果 */
+  box-shadow:
+    inset -4px -4px 8px rgba(255, 255, 255, 0.8),
+    inset 4px 4px 8px rgba(163, 177, 198, 0.3);
 }
 
 input[type='text']:focus {
   outline: none;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  border-color: #4caf50;
+  /* 聚焦时的立体效果 */
+  box-shadow:
+    inset -6px -6px 12px rgba(255, 255, 255, 0.9),
+    inset 6px 6px 12px rgba(163, 177, 198, 0.4),
+    0 0 0 3px rgba(59, 130, 246, 0.2);
+  color: #1f2937;
 }
 
 input[type='submit'] {

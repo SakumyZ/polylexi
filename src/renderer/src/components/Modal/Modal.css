@@ -4,7 +4,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -14,6 +14,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 3rem;
   border-bottom: 0.1rem solid #ccc;
 }
 
@@ -23,30 +24,53 @@
   font-weight: 400;
 }
 
-.close {
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
 .modal-content {
   display: flex;
   flex-direction: column;
-  background-color: #fff;
+  background: #f0f0f0;
   padding: 1rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
+  border-radius: 16px;
+  /* 极简光晕效果 - 只保留细腻的光晕 */
+  box-shadow:
+    -2px -2px 4px rgba(255, 255, 255, 0.5),
+    2px 2px 4px rgba(163, 177, 198, 0.2),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.6),
+    inset -1px -1px 2px rgba(163, 177, 198, 0.1);
   position: relative;
   width: 55rem;
-  padding: 1rem;
   text-align: left;
+  /* 增加边框增强立体感 */
+  border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
 .close {
   position: absolute;
   top: 0.5rem;
-  right: 0.5rem;
-  font-size: 1.5rem;
+  right: 0.8rem;
+  font-size: 1.8rem;
   cursor: pointer;
+  color: #6b7280;
+  transition: all 0.2s ease;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  /* 极细腻的光晕效果 */
+  background: #f0f0f0;
+  box-shadow:
+    -1px -1px 2px rgba(255, 255, 255, 0.6),
+    1px 1px 2px rgba(163, 177, 198, 0.2);
+}
+
+.close:hover {
+  color: #374151;
+  background: #e8e8e8;
+  box-shadow:
+    -2px -2px 3px rgba(255, 255, 255, 0.7),
+    2px 2px 3px rgba(163, 177, 198, 0.3);
+  transform: scale(1.05);
 }
 
 .modal-body {
