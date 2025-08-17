@@ -29,8 +29,10 @@ const Modal: React.FC<ModalProps> = ({ open, title, children, actions, onOk, onC
                 actions
               ) : (
                 <>
-                  <Button onClick={onOk}>确认</Button>
                   <Button onClick={onClose}>取消</Button>
+                  <Button primary onClick={onOk}>
+                    确认
+                  </Button>
                 </>
               )}
             </div>

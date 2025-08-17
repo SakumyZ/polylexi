@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import Home from './pages/Home'
 import Detial from './pages/Detial'
+import { DialogProvider } from './components/Dialog/DialogProvider'
 
 function App() {
   const [showDetial, setShowDetial] = useState(false)
@@ -25,7 +26,7 @@ function App() {
     />
   )
 
-  return <>{showDetial ? detial : home}</>
+  return <DialogProvider>{showDetial ? detial : home}</DialogProvider>
 }
 
 export default App

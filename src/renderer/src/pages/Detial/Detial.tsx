@@ -7,6 +7,7 @@ import WordContent from './components/WordContent/WordContent'
 import WordContentEdit from './components/WordContentEdit/WordContentEdit'
 import { uuid } from '@renderer/utils/common'
 import Button from '@renderer/components/Button'
+import { useDialog } from '@renderer/hooks/useDialog'
 // import { left } from '@popperjs/core'
 
 interface DetialProps {
@@ -15,6 +16,7 @@ interface DetialProps {
 }
 
 const Detial: React.FC<DetialProps> = ({ dictionaryId, onCancelHome }) => {
+  const { dialog } = useDialog()
   const [wordDetial, setWordDetail] = useState<WordOptions[]>([])
   const [isReadOnly, setIsReadOnly] = useState<boolean>(true)
   const [isEidt, setIsEidt] = useState<boolean>(false)
@@ -23,27 +25,31 @@ const Detial: React.FC<DetialProps> = ({ dictionaryId, onCancelHome }) => {
 
   const handleDeleteWord = async () => {
     if (!wordId) {
-      alert('请先选择一个单词')
+      await dialog.alert({
+        title: '提示',
+        content: '请先选择一个单词'
+      })
       return
     }
 
-    const confirmDelete = window.confirm(
-      '确定要删除这个单词吗？删除后将无法恢复，该单词的所有语言版本都会被删除。'
-    )
+    try {
+      const confirmed = await dialog.confirm({
+        title: '删除单词',
+        content: '确定要删除这个单词吗？删除后将无法恢复，该单词的所有语言版本都会被删除。',
+        confirmText: '删除',
+        cancelText: '取消'
+      })
 
-    if (confirmDelete) {
-      try {
+      if (confirmed) {
         await deleteWord(dictionaryId.toString(), wordId)
-        alert('单词删除成功')
         // 清空当前显示的单词详情
         setWordDetail([])
         setWordId('')
         // 刷新侧边栏 - 通过设置新的 refreshTrigger 来触发 WordSidebar 重新加载
         setRefreshTrigger(uuid())
-      } catch (error) {
-        console.error('删除单词失败:', error)
-        alert('删除单词失败，请稍后重试。')
       }
+    } catch (error) {
+      console.error('删除单词失败:', error)
     }
   }
 

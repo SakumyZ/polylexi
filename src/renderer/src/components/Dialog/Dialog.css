@@ -1,0 +1,218 @@
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+
+.dialog-content {
+  background: #f5f5f5;
+  border-radius: 16px;
+  min-width: 320px;
+  max-width: 480px;
+  box-shadow:
+    inset 2px 2px 8px rgba(255, 255, 255, 0.9),
+    inset -2px -2px 8px rgba(0, 0, 0, 0.1),
+    0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 0;
+  position: relative;
+  animation: dialogAppear 0.2s ease-out;
+}
+
+@keyframes dialogAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.dialog-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.dialog-title {
+  display: flex;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.dialog-body {
+  padding: 20px 24px 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.dialog-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin-right: 1rem;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialog-icon::before {
+  content: '';
+  position: absolute;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.dialog-icon-confirm {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  box-shadow:
+    inset 1px 1px 3px rgba(255, 255, 255, 0.3),
+    inset -1px -1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.dialog-icon-confirm::before {
+  content: '?';
+  color: white;
+}
+
+.dialog-icon-warning {
+  background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+  box-shadow:
+    inset 1px 1px 3px rgba(255, 255, 255, 0.3),
+    inset -1px -1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.dialog-icon-warning::before {
+  content: '!';
+  color: white;
+}
+
+.dialog-icon-error {
+  background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+  box-shadow:
+    inset 1px 1px 3px rgba(255, 255, 255, 0.3),
+    inset -1px -1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.dialog-icon-error::before {
+  content: '✕';
+  color: white;
+}
+
+.dialog-icon-alert {
+  background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+  box-shadow:
+    inset 1px 1px 3px rgba(255, 255, 255, 0.3),
+    inset -1px -1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.dialog-icon-alert::before {
+  content: 'i';
+  color: white;
+  font-style: italic;
+}
+
+.dialog-text {
+  margin: 0;
+  color: #666;
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+.dialog-actions {
+  padding: 1rem 1.5rem;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.dialog-cancel-btn,
+.dialog-confirm-btn {
+  min-width: 80px;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.dialog-cancel-btn {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  color: #666;
+  box-shadow:
+    2px 2px 6px rgba(0, 0, 0, 0.1),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.dialog-cancel-btn:hover {
+  background: #eee;
+  box-shadow:
+    1px 1px 3px rgba(0, 0, 0, 0.15),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.9);
+}
+
+.dialog-confirm-btn {
+  background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+  border: none;
+  color: white;
+  box-shadow:
+    2px 2px 6px rgba(0, 0, 0, 0.15),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+.dialog-confirm-btn:hover {
+  background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+  box-shadow:
+    1px 1px 3px rgba(0, 0, 0, 0.2),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .dialog-content {
+    min-width: 28rem;
+    max-width: 90%;
+    margin: 0 1rem;
+  }
+
+  .dialog-header {
+    padding: 1.5rem 1.5rem 1rem 1.5rem;
+  }
+
+  .dialog-title {
+    font-size: 1.6rem;
+  }
+
+  .dialog-body {
+    padding: 1.5rem;
+  }
+
+  .dialog-text {
+    font-size: 1.3rem;
+  }
+
+  .dialog-actions {
+    padding: 1rem 1.5rem 1.5rem 1.5rem;
+    gap: 0.8rem;
+  }
+
+  .dialog-confirm-btn,
+  .dialog-cancel-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 1.3rem;
+    min-width: 7rem;
+  }
+}

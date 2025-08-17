@@ -10,12 +10,14 @@ import {
   deleteDictionary,
   updateDictionary
 } from '@renderer/api/dictionary'
+import { useDialog } from '@renderer/hooks/useDialog'
 
 interface HomeProps {
   onShowDetail: (dictionaryId: number) => void
 }
 
 export const Home: React.FC<HomeProps> = ({ onShowDetail }) => {
+  const { dialog } = useDialog()
   const [dictionaryList, setDictionaryList] = React.useState<DictionaryOptions[]>([])
   const [openCreateModal, setOpenCreateModal] = React.useState(false)
   const [editCoverModal, setEditCoverModal] = React.useState<{
@@ -90,7 +92,10 @@ export const Home: React.FC<HomeProps> = ({ onShowDetail }) => {
         await refreshDictionaryList()
       } catch (error) {
         console.error('重命名词典失败:', error)
-        alert('重命名词典失败，请稍后重试。')
+        await dialog.alert({
+          title: '重命名失败',
+          content: '重命名词典失败，请稍后重试。'
+        })
       }
     }
   }
@@ -103,24 +108,35 @@ export const Home: React.FC<HomeProps> = ({ onShowDetail }) => {
         await refreshDictionaryList()
       } catch (error) {
         console.error('更新封面失败:', error)
-        alert('更新封面失败，请稍后重试。')
+        await dialog.alert({
+          title: '更新失败',
+          content: '更新封面失败，请稍后重试。'
+        })
       }
     }
   }
 
   const handleDeleteDictionary = async (id: number) => {
-    const confirmDelete = window.confirm('确定要删除这个词典吗？删除后将无法恢复。')
+    try {
+      const confirmed = await dialog.confirm({
+        title: '删除词典',
+        content: '确定要删除这个词典吗？删除后将无法恢复。',
+        confirmText: '删除',
+        cancelText: '取消'
+      })
 
-    if (confirmDelete) {
-      try {
+      if (confirmed) {
         await deleteDictionary(id)
         // 重新获取词典列表
         const updatedList = await getDictionaryList()
         setDictionaryList(updatedList)
-      } catch (error) {
-        console.error('删除词典失败:', error)
-        alert('删除词典失败，请稍后重试。')
       }
+    } catch (error) {
+      console.error('删除词典失败:', error)
+      await dialog.alert({
+        title: '删除失败',
+        content: '删除词典失败，请稍后重试。'
+      })
     }
   }
 
