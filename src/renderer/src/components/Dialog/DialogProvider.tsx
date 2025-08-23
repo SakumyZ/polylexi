@@ -7,7 +7,7 @@ interface DialogContextType {
   dialog: DialogMethods
 }
 
-export const DialogContext = createContext<DialogContextType | null>(null)
+export const DialogContext = createContext<DialogContextType | undefined>(undefined)
 
 interface DialogProviderProps {
   children: React.ReactNode
@@ -24,33 +24,38 @@ export const DialogProvider: React.FC<DialogProviderProps> = ({ children }) => {
     cancelText: '取消'
   })
 
-  const showDialog = useCallback((options: DialogOptions & { type: DialogProps['type']; showCancel?: boolean }): Promise<any> => {
-    return new Promise((resolve) => {
-      const handleConfirm = () => {
-        console.log('Dialog confirm clicked')
-        setDialogState(prev => ({ ...prev, open: false }))
-        resolve(true)
-      }
+  const showDialog = useCallback(
+    (
+      options: DialogOptions & { type: DialogProps['type']; showCancel?: boolean }
+    ): Promise<boolean> => {
+      return new Promise((resolve) => {
+        const handleConfirm = () => {
+          console.log('Dialog confirm clicked')
+          setDialogState((prev) => ({ ...prev, open: false }))
+          resolve(true)
+        }
 
-      const handleCancel = () => {
-        console.log('Dialog cancel clicked')
-        setDialogState(prev => ({ ...prev, open: false }))
-        resolve(false)
-      }
+        const handleCancel = () => {
+          console.log('Dialog cancel clicked')
+          setDialogState((prev) => ({ ...prev, open: false }))
+          resolve(false)
+        }
 
-      console.log('Showing dialog with options:', options)
-      setDialogState({
-        ...options,
-        open: true,
-        showCancel: options.showCancel !== undefined ? options.showCancel : true,
-        confirmText: options.confirmText || '确定',
-        cancelText: options.cancelText || '取消',
-        onConfirm: handleConfirm,
-        onCancel: handleCancel,
-        onClose: handleCancel
+        console.log('Showing dialog with options:', options)
+        setDialogState({
+          ...options,
+          open: true,
+          showCancel: options.showCancel !== undefined ? options.showCancel : true,
+          confirmText: options.confirmText || '确定',
+          cancelText: options.cancelText || '取消',
+          onConfirm: handleConfirm,
+          onCancel: handleCancel,
+          onClose: handleCancel
+        })
       })
-    })
-  }, [])
+    },
+    []
+  )
 
   const dialog: DialogMethods = {
     confirm: (options: DialogOptions) => {
@@ -58,8 +63,8 @@ export const DialogProvider: React.FC<DialogProviderProps> = ({ children }) => {
       return showDialog({ ...options, type: 'confirm' })
     },
     warning: (options: DialogOptions) => showDialog({ ...options, type: 'warning' }),
-    error: (options: DialogOptions) => showDialog({ ...options, type: 'error', showCancel: false }),
-    alert: (options: DialogOptions) => showDialog({ ...options, type: 'alert', showCancel: false })
+    error: (options: DialogOptions) => showDialog({ ...options, type: 'error', showCancel: false }).then(() => {}),
+    alert: (options: DialogOptions) => showDialog({ ...options, type: 'alert', showCancel: false }).then(() => {})
   }
 
   console.log('DialogProvider rendering with dialog object:', dialog)

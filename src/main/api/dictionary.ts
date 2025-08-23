@@ -131,7 +131,7 @@ ipcMain.handle('getDictionaryDetial', (_, payload) => {
     dictionary_id: dictionaryId,
     ...params
   }
-  
+
   // 如果没有指定语言，则默认查询主要语言（中文）
   if (!params || !params.lang) {
     query.language_id = 1

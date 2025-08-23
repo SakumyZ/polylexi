@@ -59,7 +59,7 @@ const WordSidebar: React.FC<WordSidebarProps> = ({
         setWordList(res)
         // 如果有currentWordId且该单词仍在列表中，设置为选中状态
         if (currentWordId) {
-          const wordExists = res.some(item => item.word_id.toString() === currentWordId)
+          const wordExists = res.some((item) => item.word_id.toString() === currentWordId)
           if (wordExists) {
             setSelectedItemId(currentWordId)
           } else {

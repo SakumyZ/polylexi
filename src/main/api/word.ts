@@ -2,8 +2,22 @@ import { ipcMain } from 'electron'
 import { insert, select, update, deleteRecord } from '../electron/db'
 import { WordMap } from '../typings/word'
 
-ipcMain.handle('getWordDetial', (_, payload: any) => {
-  const { dictionaryId, wordId } = JSON.parse(payload)
+interface WordDetailResponse {
+  id: number
+  dictionary_id: number
+  language_id: number
+  lang: string
+  word_id: number
+  word: string
+  created_at: string
+  updated_at: string
+}
+
+ipcMain.handle('getWordDetial', (_, payload: string): WordDetailResponse[] => {
+  const { dictionaryId, wordId } = JSON.parse(payload) as {
+    dictionaryId: string
+    wordId: string
+  }
 
   const res = select('words', {
     dictionary_id: dictionaryId,
@@ -63,7 +77,7 @@ const addWord = (dictionaryId: string, wordMap: WordMap): string => {
   return wordId
 }
 
-ipcMain.handle('addWord', (_, payload: any) => {
+ipcMain.handle('addWord', (_, payload: string) => {
   const { dictionaryId, wordMap } = JSON.parse(payload) as {
     dictionaryId: string
     wordMap: WordMap
@@ -74,8 +88,8 @@ ipcMain.handle('addWord', (_, payload: any) => {
   return wordId
 })
 
-export const importWords = (wordList: any[]) => {
-  const map: any = {
+export const importWords = (wordList: Record<string, string>[]) => {
+  const map: Record<string, number> = {
     'zh-CN': 1,
     'en-US': 2,
     'ja-JP': 3
@@ -84,7 +98,7 @@ export const importWords = (wordList: any[]) => {
   const dictionaryId = '9'
 
   wordList.forEach((wordObj) => {
-    const wordMap: any = {}
+    const wordMap: WordMap = {}
 
     // console.log(wordObj)
 
@@ -94,7 +108,7 @@ export const importWords = (wordList: any[]) => {
         const word = wordObj[lang]
         wordMap[lang] = {
           id: map[lang],
-          lang: word
+          word: word
         }
 
         // addWord(dictionaryId, wordMap)
@@ -105,11 +119,11 @@ export const importWords = (wordList: any[]) => {
   })
 }
 
-ipcMain.handle('updateWord', (_, payload: string) => {
+ipcMain.handle('updateWord', (_, payload: string): { success: boolean } => {
   console.log('🚀 ~ updateWord:')
 
   const { dictionaryId, wordMap } = JSON.parse(payload) as {
-    dictionaryId: number
+    dictionaryId: string
     wordMap: WordMap
   }
 
@@ -122,9 +136,10 @@ ipcMain.handle('updateWord', (_, payload: string) => {
   }
 
   console.log(dictionaryId, wordMap)
+  return { success: true }
 })
 
-ipcMain.handle('deleteWord', (_, payload: string) => {
+ipcMain.handle('deleteWord', (_, payload: string): { success: boolean } => {
   const { dictionaryId, wordId } = JSON.parse(payload) as {
     dictionaryId: string
     wordId: string
@@ -139,4 +154,5 @@ ipcMain.handle('deleteWord', (_, payload: string) => {
   })
 
   console.log(`delete ${dictionaryId}  ${wordId}`)
+  return { success: true }
 })

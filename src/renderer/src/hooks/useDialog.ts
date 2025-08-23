@@ -18,7 +18,7 @@ export interface DialogMethods {
 export const useDialog = () => {
   const context = useContext(DialogContext)
 
-  if (!context) {
+  if (context === undefined) {
     console.error('useDialog must be used within a DialogProvider')
     // 返回一个空的dialog对象以避免运行时错误
     return {

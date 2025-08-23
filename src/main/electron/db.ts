@@ -116,7 +116,7 @@ export const exec = (sql: string) => {
   return result
 }
 
-export const select = (tableName: string, params?: Record<string, unknown>) => {
+export const select = (tableName: string, params?: Record<string, unknown>): any[] => {
   let sql = ''
 
   if (params) {
@@ -142,7 +142,7 @@ export const select = (tableName: string, params?: Record<string, unknown>) => {
   return result
 }
 
-export const insert = (tableName: string, params: Record<string, unknown>) => {
+export const insert = (tableName: string, params: Record<string, unknown>): { lastInsertRowid: number; changes: number } => {
   const sql = `INSERT INTO ${tableName} (${Object.keys(params).join(',')}) VALUES (${Object.keys(
     params
   )
@@ -173,7 +173,7 @@ export const update = (
   tableName: string,
   params: Record<string, unknown>,
   where: Record<string, unknown>
-) => {
+): { changes: number } => {
   const sql = `UPDATE ${tableName} SET ${Object.keys(params)
     .map((key) => {
       const value = params[key]
@@ -215,7 +215,7 @@ export const update = (
   return exec(sql)
 }
 
-export const deleteRecord = (tableName: string, where: Record<string, unknown>) => {
+export const deleteRecord = (tableName: string, where: Record<string, unknown>): { changes: number } => {
   const sql = `DELETE FROM ${tableName} WHERE ${Object.keys(where)
     .map((key) => {
       const value = where[key]
