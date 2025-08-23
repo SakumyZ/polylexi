@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'
+import { HashRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'
 import Home from '@renderer/pages/Home/Home'
 import Detial from '@renderer/pages/Detial/Detial'
 import Settings from '@renderer/pages/Settings/Settings'
