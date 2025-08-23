@@ -49,6 +49,20 @@ const menuTemplate: MenuItemConstructorOptions[] = [
     ]
   },
   {
+    label: '设置',
+    submenu: [
+      {
+        label: '主语言设置',
+        click(menuItem, browserWindow, event) {
+          // 通过IPC发送消息到渲染进程，打开设置页面
+          if (browserWindow) {
+            browserWindow.webContents.send('open-settings')
+          }
+        }
+      }
+    ]
+  },
+  {
     label: '帮助',
     submenu: [
       {

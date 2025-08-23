@@ -19,6 +19,11 @@ export const initDB = () => {
     )
   `)
 
+  // 为 dictionary 表的 name 字段添加索引，提高查询性能
+  db.exec(`
+    CREATE INDEX IF NOT EXISTS idx_dictionary_name ON dictionary (name)
+  `)
+
   // 检查是否需要迁移数据库（只有在表存在的情况下才检查）
   try {
     const tableInfo = db.pragma('table_info(dictionary)')
@@ -50,6 +55,11 @@ export const initDB = () => {
     )
   `)
 
+  // 为 languages 表的 lang 字段添加索引，提高查询性能
+  db.exec(`
+    CREATE INDEX IF NOT EXISTS idx_languages_lang ON languages (lang)
+  `)
+
   // 插入默认语言数据
   db.exec(`
     INSERT OR IGNORE INTO languages (id, name, lang) VALUES
@@ -70,6 +80,23 @@ export const initDB = () => {
       FOREIGN KEY (language_id) REFERENCES languages(id),
       FOREIGN KEY (dictionary_id) REFERENCES dictionary(id)
     )
+  `)
+
+  // 为 words 表的关键字段添加索引，提高查询性能
+  db.exec(`
+    CREATE INDEX IF NOT EXISTS idx_words_dictionary_id ON words (dictionary_id)
+  `)
+
+  db.exec(`
+    CREATE INDEX IF NOT EXISTS idx_words_language_id ON words (language_id)
+  `)
+
+  db.exec(`
+    CREATE INDEX IF NOT EXISTS idx_words_word_id ON words (word_id)
+  `)
+
+  db.exec(`
+    CREATE INDEX IF NOT EXISTS idx_words_lang ON words (lang)
   `)
   db.exec(`
     CREATE TABLE IF NOT EXISTS tag (
@@ -97,6 +124,22 @@ export const initDB = () => {
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (word_id) REFERENCES word (id)
     )
+  `)
+
+  // 创建用户配置表
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS user_profile (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      key TEXT UNIQUE NOT NULL,
+      value TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `)
+
+  // 为用户配置表的 key 字段添加索引，提高查询性能
+  db.exec(`
+    CREATE INDEX IF NOT EXISTS idx_user_profile_key ON user_profile (key)
   `)
 
   db.close()
@@ -142,7 +185,10 @@ export const select = (tableName: string, params?: Record<string, unknown>): any
   return result
 }
 
-export const insert = (tableName: string, params: Record<string, unknown>): { lastInsertRowid: number; changes: number } => {
+export const insert = (
+  tableName: string,
+  params: Record<string, unknown>
+): { lastInsertRowid: number; changes: number } => {
   const sql = `INSERT INTO ${tableName} (${Object.keys(params).join(',')}) VALUES (${Object.keys(
     params
   )
@@ -215,7 +261,10 @@ export const update = (
   return exec(sql)
 }
 
-export const deleteRecord = (tableName: string, where: Record<string, unknown>): { changes: number } => {
+export const deleteRecord = (
+  tableName: string,
+  where: Record<string, unknown>
+): { changes: number } => {
   const sql = `DELETE FROM ${tableName} WHERE ${Object.keys(where)
     .map((key) => {
       const value = where[key]

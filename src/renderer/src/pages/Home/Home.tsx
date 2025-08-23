@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Dictionary from '@renderer/components/Dictionary'
 import CreateDictionaryModal from '@renderer/popup/CreateDictionaryModal'
 import EditCoverModal from '@renderer/popup/EditCoverModal'
@@ -12,11 +13,8 @@ import {
 } from '@renderer/api/dictionary'
 import { useDialog } from '@renderer/hooks/useDialog'
 
-interface HomeProps {
-  onShowDetail: (dictionaryId: number) => void
-}
-
-export const Home: React.FC<HomeProps> = ({ onShowDetail }) => {
+export const Home: React.FC = () => {
+  const navigate = useNavigate()
   const dialog = useDialog()
   const [dictionaryList, setDictionaryList] = React.useState<DictionaryOptions[]>([])
   const [openCreateModal, setOpenCreateModal] = React.useState(false)
@@ -170,7 +168,7 @@ export const Home: React.FC<HomeProps> = ({ onShowDetail }) => {
             name={item.name}
             cover={item.cover}
             onClick={() => {
-              onShowDetail(item.id)
+              navigate(`/detail/${item.id}`)
             }}
             onDelete={handleDeleteDictionary}
             onEditCover={handleEditCover}

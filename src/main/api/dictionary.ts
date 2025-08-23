@@ -2,6 +2,9 @@ import { ipcMain } from 'electron'
 import { insert, select, deleteRecord, update } from '@main/electron/db'
 import { FileManager } from '../utils/fileManager'
 
+// 简单的内存缓存对象
+const memoryCache: Record<string, any> = {}
+
 // 定义词典数据类型
 interface Dictionary {
   id: number
@@ -123,6 +126,39 @@ ipcMain.handle('getDictionaryList', async () => {
   }
 })
 
+// 获取用户主语言设置
+const getUserMainLanguage = () => {
+  try {
+    // 首先尝试从缓存中获取主语言设置
+    const cachedLanguage = memoryCache.MAIN_LANGUAGE
+    if (cachedLanguage) {
+      const languages = select('languages', { lang: cachedLanguage })
+      if (languages.length > 0) {
+        return languages[0].id
+      }
+    }
+
+    // 如果缓存中没有，则从数据库获取
+    const profiles = select('user_profile', { key: 'main_language' })
+    if (profiles.length > 0 && profiles[0].value) {
+      // 根据语言代码获取对应的语言ID
+      const languageCode = profiles[0].value
+      const languages = select('languages', { lang: languageCode })
+      if (languages.length > 0) {
+        // 将主语言设置保存到内存缓存中
+        memoryCache.MAIN_LANGUAGE = languageCode
+        return languages[0].id
+      }
+    }
+    // 默认返回中文ID
+    return 1
+  } catch (error) {
+    console.error('Get user main language failed:', error)
+    // 默认返回中文ID
+    return 1
+  }
+}
+
 ipcMain.handle('getDictionaryDetial', (_, payload) => {
   const { dictionaryId, params } = JSON.parse(payload)
 
@@ -132,12 +168,24 @@ ipcMain.handle('getDictionaryDetial', (_, payload) => {
     ...params
   }
 
-  // 如果没有指定语言，则默认查询主要语言（中文）
+  // 如果没有指定语言，则查询用户设置的主要语言版本
   if (!params || !params.lang) {
-    query.language_id = 1
+    const mainLanguageId = getUserMainLanguage()
+    query.language_id = mainLanguageId
   }
 
   const res = select('words', query)
 
   return res
+})
+
+// 获取语言列表
+ipcMain.handle('getLanguageList', async () => {
+  try {
+    const results = select('languages')
+    return results
+  } catch (error) {
+    console.error('Get language list failed:', error)
+    throw error
+  }
 })

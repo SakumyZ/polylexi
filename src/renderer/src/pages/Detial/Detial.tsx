@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import { WordOptions } from '@renderer/api/dictionary'
 import { getWordDetial, deleteWord } from '@renderer/api/word'
 import WordSidebar from './components/WordSidebar/WordSidebar'
@@ -10,12 +11,11 @@ import Button from '@renderer/components/Button'
 import { useDialog } from '@renderer/hooks/useDialog'
 // import { left } from '@popperjs/core'
 
-interface DetialProps {
-  dictionaryId: number
-  onCancelHome: () => void
-}
+interface DetialProps {}
 
-const Detial: React.FC<DetialProps> = ({ dictionaryId, onCancelHome }) => {
+const Detial: React.FC<DetialProps> = () => {
+  const { dictionaryId } = useParams<{ dictionaryId: string }>()
+  const navigate = useNavigate()
   const dialog = useDialog()
   const [wordDetial, setWordDetail] = useState<WordOptions[]>([])
   const [isReadOnly, setIsReadOnly] = useState<boolean>(true)
@@ -89,7 +89,7 @@ const Detial: React.FC<DetialProps> = ({ dictionaryId, onCancelHome }) => {
           >
             <Button
               onClick={() => {
-                onCancelHome()
+                navigate('/')
               }}
             >
               返回
