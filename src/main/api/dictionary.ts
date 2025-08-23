@@ -126,11 +126,18 @@ ipcMain.handle('getDictionaryList', async () => {
 ipcMain.handle('getDictionaryDetial', (_, payload) => {
   const { dictionaryId, params } = JSON.parse(payload)
 
-  const res = select('words', {
+  // 如果有params.word，则按单词搜索，否则获取所有单词的主要语言版本
+  const query = {
     dictionary_id: dictionaryId,
-    language_id: 1,
     ...params
-  })
+  }
+  
+  // 如果没有指定语言，则默认查询主要语言（中文）
+  if (!params || !params.lang) {
+    query.language_id = 1
+  }
+
+  const res = select('words', query)
 
   return res
 })

@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'
+import { useForm, SubmitHandler } from 'react-hook-form'
 import Modal from '../components/Modal'
 import ImageCropper from '../components/ImageCropper'
 import './CreateDictionaryModal.css'
@@ -9,20 +10,27 @@ interface CreateDictionaryModalProps {
   onCreate: (name: string, cover?: string) => void
 }
 
+type FormState = {
+  name: string
+}
+
 const CreateDictionaryModal: React.FC<CreateDictionaryModalProps> = ({
   open,
   onClose,
   onCreate
 }) => {
-  const [name, setName] = useState('')
+  const {
+    register,
+    handleSubmit,
+    clearErrors,
+    reset,
+    formState: { errors }
+  } = useForm<FormState>()
+
   const [cover, setCover] = useState<string | null>(null)
   const [originalImage, setOriginalImage] = useState<string | null>(null)
   const [showCropper, setShowCropper] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
-
-  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value)
-  }
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -74,21 +82,7 @@ const CreateDictionaryModal: React.FC<CreateDictionaryModalProps> = ({
     }
   }
 
-  const handleCreate = () => {
-    if (!name.trim()) {
-      alert('请输入词典名称')
-      return
-    }
-    onCreate(name.trim(), cover || undefined)
-    setName('')
-    setCover(null)
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ''
-    }
-  }
-
   const handleClose = () => {
-    setName('')
     setCover(null)
     setShowCropper(false)
     setOriginalImage(null)
@@ -96,6 +90,17 @@ const CreateDictionaryModal: React.FC<CreateDictionaryModalProps> = ({
       fileInputRef.current.value = ''
     }
     onClose()
+    clearErrors()
+    reset()
+  }
+
+  const onSubmit: SubmitHandler<FormState> = (data) => {
+    onCreate(data.name.trim(), cover || undefined)
+    setCover(null)
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
   }
 
   // 如果正在显示裁切器，返回裁切界面
@@ -114,56 +119,58 @@ const CreateDictionaryModal: React.FC<CreateDictionaryModalProps> = ({
   }
 
   return (
-    <Modal title="新建词典" open={open} onOk={handleCreate} onClose={handleClose}>
-      <div className="create-dictionary-modal">
-        <div className="create-dictionary-form">
-          <div className="form-field">
-            <label htmlFor="name" className="field-label">
-              词典名称
-            </label>
-            <input
-              type="text"
-              id="name"
-              value={name}
-              onChange={handleNameChange}
-              placeholder="请输入词典名称"
-              className="form-input"
-            />
-          </div>
-
-          <div className="form-field">
-            <label className="field-label">词典封面</label>
-            <div className="cover-preview-area">
-              {cover ? (
-                <div className="cover-preview">
-                  <img src={cover} alt="词典封面" className="cover-image" />
-                  <button onClick={handleRemoveCover} className="remove-cover-btn">
-                    ×
-                  </button>
-                </div>
-              ) : (
-                <div className="upload-area" onClick={handleCoverClick}>
-                  <span className="upload-icon">+</span>
-                  <span className="upload-text">
-                    点击上传封面
-                    <br />
-                    (可选)
-                  </span>
-                </div>
-              )}
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Modal title="新建词典" open={open} onClose={handleClose}>
+        <div className="create-dictionary-modal">
+          <div className="create-dictionary-form">
+            <div className="form-field">
+              <label htmlFor="name" className="form-label required">
+                词典名称
+              </label>
               <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="hidden-input"
+                type="text"
+                id="name"
+                placeholder="请输入词典名称"
+                className="form-input"
+                {...register('name', { required: '请输入词典名称' })}
               />
+              {errors.name && <p className="form-error">{errors.name.message}</p>}
             </div>
-            <p className="upload-hint">支持 JPG、PNG 格式，大小不超过 5MB，上传后可进行裁切</p>
+
+            <div className="form-field">
+              <label className="form-label">词典封面</label>
+              <div className="cover-preview-area">
+                {cover ? (
+                  <div className="cover-preview">
+                    <img src={cover} alt="词典封面" className="cover-image" />
+                    <button onClick={handleRemoveCover} className="remove-cover-btn">
+                      ×
+                    </button>
+                  </div>
+                ) : (
+                  <div className="upload-area" onClick={handleCoverClick}>
+                    <span className="upload-icon">+</span>
+                    <span className="upload-text">
+                      点击上传封面
+                      <br />
+                      (可选)
+                    </span>
+                  </div>
+                )}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="hidden-input"
+                />
+              </div>
+              <p className="upload-hint">支持 JPG、PNG 格式，大小不超过 5MB，上传后可进行裁切</p>
+            </div>
           </div>
         </div>
-      </div>
-    </Modal>
+      </Modal>
+    </form>
   )
 }
 

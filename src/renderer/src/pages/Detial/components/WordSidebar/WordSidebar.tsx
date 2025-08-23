@@ -57,9 +57,15 @@ const WordSidebar: React.FC<WordSidebarProps> = ({
     if (refreshTrigger) {
       getDictionaryDetial(dictionaryId).then((res) => {
         setWordList(res)
-        // 如果有currentWordId，设置为选中状态
+        // 如果有currentWordId且该单词仍在列表中，设置为选中状态
         if (currentWordId) {
-          setSelectedItemId(currentWordId)
+          const wordExists = res.some(item => item.word_id.toString() === currentWordId)
+          if (wordExists) {
+            setSelectedItemId(currentWordId)
+          } else {
+            // 如果删除的单词是当前选中的单词，清空选中状态
+            setSelectedItemId('')
+          }
         } else {
           setSelectedItemId('')
         }

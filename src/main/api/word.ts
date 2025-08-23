@@ -138,5 +138,5 @@ ipcMain.handle('deleteWord', (_, payload: string) => {
     word_id: wordId
   })
 
-  console.log(`已删除词典 ${dictionaryId} 中的单词 ${wordId} 的所有语言版本`)
+  console.log(`delete ${dictionaryId}  ${wordId}`)
 })

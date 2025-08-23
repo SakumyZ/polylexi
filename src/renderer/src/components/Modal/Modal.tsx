@@ -30,7 +30,7 @@ const Modal: React.FC<ModalProps> = ({ open, title, children, actions, onOk, onC
               ) : (
                 <>
                   <Button onClick={onClose}>取消</Button>
-                  <Button primary onClick={onOk}>
+                  <Button htmlType="submit" primary onClick={onOk}>
                     确认
                   </Button>
                 </>

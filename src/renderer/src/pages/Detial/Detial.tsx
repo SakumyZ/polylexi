@@ -16,7 +16,7 @@ interface DetialProps {
 }
 
 const Detial: React.FC<DetialProps> = ({ dictionaryId, onCancelHome }) => {
-  const { dialog } = useDialog()
+  const dialog = useDialog()
   const [wordDetial, setWordDetail] = useState<WordOptions[]>([])
   const [isReadOnly, setIsReadOnly] = useState<boolean>(true)
   const [isEidt, setIsEidt] = useState<boolean>(false)
@@ -24,7 +24,9 @@ const Detial: React.FC<DetialProps> = ({ dictionaryId, onCancelHome }) => {
   const [refreshTrigger, setRefreshTrigger] = useState<string>('')
 
   const handleDeleteWord = async () => {
+    console.log('handleDeleteWord called, wordId:', wordId)
     if (!wordId) {
+      console.log('No word selected, showing alert')
       await dialog.alert({
         title: '提示',
         content: '请先选择一个单词'
@@ -33,14 +35,17 @@ const Detial: React.FC<DetialProps> = ({ dictionaryId, onCancelHome }) => {
     }
 
     try {
+      console.log('Showing confirm dialog')
       const confirmed = await dialog.confirm({
         title: '删除单词',
         content: '确定要删除这个单词吗？删除后将无法恢复，该单词的所有语言版本都会被删除。',
         confirmText: '删除',
         cancelText: '取消'
       })
+      console.log('Confirm dialog result:', confirmed)
 
       if (confirmed) {
+        console.log('Deleting word:', dictionaryId, wordId)
         await deleteWord(dictionaryId.toString(), wordId)
         // 清空当前显示的单词详情
         setWordDetail([])
@@ -49,7 +54,9 @@ const Detial: React.FC<DetialProps> = ({ dictionaryId, onCancelHome }) => {
         setRefreshTrigger(uuid())
       }
     } catch (error) {
-      console.error('删除单词失败:', error)
+      console.error('delete failed:', error)
+      // 即使删除失败，也要刷新界面以确保一致性
+      setRefreshTrigger(uuid())
     }
   }
 
@@ -104,11 +111,7 @@ const Detial: React.FC<DetialProps> = ({ dictionaryId, onCancelHome }) => {
           >
             编辑
           </Button>
-          {isReadOnly && wordId && (
-            <Button onClick={handleDeleteWord} color="danger">
-              删除
-            </Button>
-          )}
+          {isReadOnly && wordId && <Button onClick={handleDeleteWord}>删除</Button>}
         </div>
 
         <div className="content-area">

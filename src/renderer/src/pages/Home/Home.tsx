@@ -17,7 +17,7 @@ interface HomeProps {
 }
 
 export const Home: React.FC<HomeProps> = ({ onShowDetail }) => {
-  const { dialog } = useDialog()
+  const dialog = useDialog()
   const [dictionaryList, setDictionaryList] = React.useState<DictionaryOptions[]>([])
   const [openCreateModal, setOpenCreateModal] = React.useState(false)
   const [editCoverModal, setEditCoverModal] = React.useState<{

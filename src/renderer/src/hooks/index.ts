@@ -1,3 +1,2 @@
 export { useDialog } from './useDialog'
-export { useDialogContext } from './useDialogContext'
-export type { DialogOptions, DialogMethods, UseDialogReturn } from './useDialog'
+export type { DialogOptions, DialogMethods } from './useDialog'

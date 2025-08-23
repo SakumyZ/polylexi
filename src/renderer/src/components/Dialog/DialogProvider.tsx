@@ -1,36 +1,73 @@
-import React, { createContext, useContext, ReactNode } from 'react'
+import React, { createContext, useState, useCallback } from 'react'
 import Dialog from './Dialog'
-import { useDialog } from '@renderer/hooks/useDialog'
 import { DialogProps } from './Dialog'
-import { DialogMethods } from '@renderer/hooks/useDialog'
+import { DialogMethods, DialogOptions } from '@renderer/hooks/useDialog'
 
 interface DialogContextType {
   dialog: DialogMethods
-  dialogProps: DialogProps
-  updateDialogProps: (props: Partial<DialogProps>) => void
 }
 
-export const DialogContext = createContext<DialogContextType | undefined>(undefined)
+export const DialogContext = createContext<DialogContextType | null>(null)
 
 interface DialogProviderProps {
-  children: ReactNode
+  children: React.ReactNode
 }
 
 export const DialogProvider: React.FC<DialogProviderProps> = ({ children }) => {
-  const { dialog, dialogProps, updateDialogProps } = useDialog()
+  const [dialogState, setDialogState] = useState<DialogProps>({
+    open: false,
+    title: '',
+    content: '',
+    type: 'confirm',
+    showCancel: true,
+    confirmText: '确定',
+    cancelText: '取消'
+  })
+
+  const showDialog = useCallback((options: DialogOptions & { type: DialogProps['type']; showCancel?: boolean }): Promise<any> => {
+    return new Promise((resolve) => {
+      const handleConfirm = () => {
+        console.log('Dialog confirm clicked')
+        setDialogState(prev => ({ ...prev, open: false }))
+        resolve(true)
+      }
+
+      const handleCancel = () => {
+        console.log('Dialog cancel clicked')
+        setDialogState(prev => ({ ...prev, open: false }))
+        resolve(false)
+      }
+
+      console.log('Showing dialog with options:', options)
+      setDialogState({
+        ...options,
+        open: true,
+        showCancel: options.showCancel !== undefined ? options.showCancel : true,
+        confirmText: options.confirmText || '确定',
+        cancelText: options.cancelText || '取消',
+        onConfirm: handleConfirm,
+        onCancel: handleCancel,
+        onClose: handleCancel
+      })
+    })
+  }, [])
+
+  const dialog: DialogMethods = {
+    confirm: (options: DialogOptions) => {
+      console.log('Dialog confirm method called with options:', options)
+      return showDialog({ ...options, type: 'confirm' })
+    },
+    warning: (options: DialogOptions) => showDialog({ ...options, type: 'warning' }),
+    error: (options: DialogOptions) => showDialog({ ...options, type: 'error', showCancel: false }),
+    alert: (options: DialogOptions) => showDialog({ ...options, type: 'alert', showCancel: false })
+  }
+
+  console.log('DialogProvider rendering with dialog object:', dialog)
 
   return (
-    <DialogContext.Provider value={{ dialog, dialogProps, updateDialogProps }}>
+    <DialogContext.Provider value={{ dialog }}>
       {children}
-      <Dialog {...dialogProps} />
+      <Dialog {...dialogState} />
     </DialogContext.Provider>
   )
-}
-
-export const useDialogContext = () => {
-  const context = useContext(DialogContext)
-  if (context === undefined) {
-    throw new Error('useDialogContext must be used within a DialogProvider')
-  }
-  return context
 }

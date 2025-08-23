@@ -52,7 +52,7 @@ const RenameDictionaryModal: React.FC<RenameDictionaryModalProps> = ({
       <div className="create-dictionary-modal">
         <div className="create-dictionary-form">
           <div className="form-field">
-            <label htmlFor="rename-input" className="field-label">
+            <label htmlFor="rename-input" className="form-label">
               词典名称
             </label>
             <input

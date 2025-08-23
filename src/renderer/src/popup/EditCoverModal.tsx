@@ -113,7 +113,7 @@ const EditCoverModal: React.FC<EditCoverModalProps> = ({
       <div className="create-dictionary-modal">
         <div className="create-dictionary-form">
           <div className="form-field">
-            <label className="field-label">词典封面</label>
+            <label className="form-label">词典封面</label>
             <div className="cover-preview-area">
               {cover ? (
                 <div className="cover-preview">
