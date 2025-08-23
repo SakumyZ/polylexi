@@ -33,7 +33,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       try {
         setLoading(true)
         setError(null)
-        
+
         // 获取语言列表
         const languageList = await getLanguageList()
         setLanguages(languageList)
@@ -54,7 +54,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       } catch (error) {
         console.error('Failed to load language data:', error)
         setError(error instanceof Error ? error.message : 'Failed to load language data')
-        
+
         // 如果数据库加载失败，使用默认语言列表
         const defaultLanguages = [
           { id: 1, name: '中文', lang: 'zh-CN' },
@@ -108,7 +108,9 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   }
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage: updateLanguage, languages, loading, error }}>
+    <LanguageContext.Provider
+      value={{ language, setLanguage: updateLanguage, languages, loading, error }}
+    >
       {children}
     </LanguageContext.Provider>
   )
@@ -158,23 +160,6 @@ export const LanguageSelectorWithPreview: React.FC = () => {
 
   return (
     <div className="language-selector-container">
-      <div className="language-selector">
-        <label>选择主语言:</label>
-        <select
-          value={language}
-          onChange={(e) => {
-            const newLanguage = e.target.value
-            setLanguage(newLanguage)
-          }}
-          className="language-select"
-        >
-          {languages.map((lang) => (
-            <option key={lang.lang} value={lang.lang}>
-              {lang.name}
-            </option>
-          ))}
-        </select>
-      </div>
       <div className="language-preview">
         {languages.map((lang) => (
           <div

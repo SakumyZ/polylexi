@@ -1,6 +1,6 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { LanguageContext, LanguageSelectorWithPreview } from '@renderer/contexts/LanguageContext'
+import { LanguageSelectorWithPreview } from '@renderer/contexts/LanguageContext'
 import Button from '@renderer/components/Button/Button'
 import './Settings.css'
 
@@ -10,14 +10,6 @@ interface SettingsProps {
 
 const Settings: React.FC<SettingsProps> = () => {
   const navigate = useNavigate()
-  const { language } = useContext(LanguageContext)
-
-  // 保存主语言设置到本地存储
-  const handleSave = () => {
-    localStorage.setItem('mainLanguage', language)
-    // 通知应用其他部分语言已更改
-    window.dispatchEvent(new CustomEvent('languageChanged', { detail: language }))
-  }
 
   return (
     <div className="settings-page">
@@ -30,9 +22,6 @@ const Settings: React.FC<SettingsProps> = () => {
         <div className="settings-actions">
           <Button onClick={() => navigate('/')} className="back-button">
             返回
-          </Button>
-          <Button primary onClick={handleSave}>
-            保存设置
           </Button>
         </div>
       </div>

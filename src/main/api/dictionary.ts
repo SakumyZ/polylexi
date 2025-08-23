@@ -3,7 +3,7 @@ import { insert, select, deleteRecord, update } from '@main/electron/db'
 import { FileManager } from '../utils/fileManager'
 
 // 简单的内存缓存对象
-const memoryCache: Record<string, any> = {}
+export const memoryCache: Record<string, any> = {}
 
 // 定义词典数据类型
 interface Dictionary {

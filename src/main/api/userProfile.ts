@@ -1,5 +1,6 @@
 import { ipcMain } from 'electron'
 import { select, insert, update } from '@main/electron/db'
+import { memoryCache } from './dictionary'
 
 // 定义用户配置数据类型
 interface UserProfile {
@@ -71,7 +72,7 @@ ipcMain.handle('setUserProfile', async (_, arg) => {
 
       // 如果是主语言设置，同时更新缓存
       if (key === 'main_language') {
-        process.env.MAIN_LANGUAGE = value
+        memoryCache.MAIN_LANGUAGE = value
       }
 
       return result
@@ -81,7 +82,7 @@ ipcMain.handle('setUserProfile', async (_, arg) => {
 
       // 如果是主语言设置，同时更新缓存
       if (key === 'main_language') {
-        process.env.MAIN_LANGUAGE = value
+        memoryCache.MAIN_LANGUAGE = value
       }
 
       return result

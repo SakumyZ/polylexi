@@ -32,6 +32,9 @@ export const deleteDictionary = (id: number) => {
   return ipcRenderer.invoke('deleteDictionary', JSON.stringify({ id }))
 }
 
-export const getDictionaryDetial = (dictionaryId: string, params?: Record<string, unknown>): Promise<WordOptions[]> => {
+export const getDictionaryDetial = (
+  dictionaryId: string,
+  params?: Record<string, unknown>
+): Promise<WordOptions[]> => {
   return ipcRenderer.invoke('getDictionaryDetial', JSON.stringify({ dictionaryId, params }))
 }
