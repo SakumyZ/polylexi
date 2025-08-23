@@ -52,8 +52,9 @@ const menuTemplate: MenuItemConstructorOptions[] = [
     label: '设置',
     click(_menuItem, browserWindow) {
       // 通过IPC发送消息到渲染进程，打开设置页面
-      if (browserWindow) {
-        browserWindow.webContents.send('open-settings')
+      const bw = browserWindow as BrowserWindow
+      if (bw) {
+        bw.webContents.send('open-settings')
       }
     }
   },

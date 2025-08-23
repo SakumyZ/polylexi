@@ -2,14 +2,6 @@ import { ipcMain } from 'electron'
 import { select, insert, update } from '@main/electron/db'
 import { memoryCache } from './dictionary'
 
-// 定义用户配置数据类型
-interface UserProfile {
-  id: number
-  key: string
-  value: string
-  created_at: string
-  updated_at: string
-}
 
 // 获取用户配置项
 ipcMain.handle('getUserProfile', async (_, arg) => {

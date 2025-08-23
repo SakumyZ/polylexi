@@ -7,7 +7,7 @@ import { LanguageProvider } from './contexts/LanguageContext'
 function App() {
   // 监听从主进程发送的打开设置页面的消息
   useEffect(() => {
-    const handleOpenSettings = (event: Electron.IpcRendererEvent) => {
+    const handleOpenSettings = () => {
       // 通过路由事件发送消息到 AppRoutes 组件
       window.dispatchEvent(new CustomEvent('open-settings-route'))
     }

@@ -15,6 +15,7 @@ interface DetialProps {}
 
 const Detial: React.FC<DetialProps> = () => {
   const { dictionaryId } = useParams<{ dictionaryId: string }>()
+
   const navigate = useNavigate()
   const dialog = useDialog()
   const [wordDetial, setWordDetail] = useState<WordOptions[]>([])
@@ -22,6 +23,11 @@ const Detial: React.FC<DetialProps> = () => {
   const [isEidt, setIsEidt] = useState<boolean>(false)
   const [wordId, setWordId] = useState<string>('')
   const [refreshTrigger, setRefreshTrigger] = useState<string>('')
+
+  // 如果 dictionaryId 不存在，返回错误信息或重定向
+  if (!dictionaryId) {
+    return <div>Error: Dictionary ID is missing</div>
+  }
 
   const handleDeleteWord = async () => {
     console.log('handleDeleteWord called, wordId:', wordId)
@@ -45,8 +51,7 @@ const Detial: React.FC<DetialProps> = () => {
       console.log('Confirm dialog result:', confirmed)
 
       if (confirmed) {
-        console.log('Deleting word:', dictionaryId, wordId)
-        await deleteWord(dictionaryId.toString(), wordId)
+        await deleteWord(dictionaryId, wordId)
         // 清空当前显示的单词详情
         setWordDetail([])
         setWordId('')
@@ -65,11 +70,11 @@ const Detial: React.FC<DetialProps> = () => {
       <WordSidebar
         refreshTrigger={refreshTrigger}
         currentWordId={wordId}
-        dictionaryId={dictionaryId.toString()}
+        dictionaryId={dictionaryId}
         onClick={(clickedWordId) => {
           setIsReadOnly(true)
           setWordId(clickedWordId)
-          getWordDetial(dictionaryId.toString(), clickedWordId.toString()).then((res) => {
+          getWordDetial(dictionaryId, clickedWordId.toString()).then((res) => {
             setWordDetail(res)
           })
         }}
@@ -121,7 +126,7 @@ const Detial: React.FC<DetialProps> = () => {
             <WordContentEdit
               isEdit={isEidt}
               data={wordDetial}
-              dictionaryId={dictionaryId.toString()}
+              dictionaryId={dictionaryId}
               onAfterAdd={(addedWordId) => {
                 // 设置新添加的单词ID
                 setWordId(addedWordId)
@@ -131,14 +136,14 @@ const Detial: React.FC<DetialProps> = () => {
                 setIsReadOnly(true)
                 setIsEidt(false)
                 // 获取新添加单词的详情
-                getWordDetial(dictionaryId.toString(), addedWordId).then((res) => {
+                getWordDetial(dictionaryId, addedWordId).then((res) => {
                   setWordDetail(res)
                 })
               }}
               onAfterEdit={() => {
                 // 编辑完成后刷新当前单词详情
                 if (wordId) {
-                  getWordDetial(dictionaryId.toString(), wordId).then((res) => {
+                  getWordDetial(dictionaryId, wordId).then((res) => {
                     setWordDetail(res)
                   })
                 }

@@ -13,7 +13,7 @@ const apiCallWithRetry = async <T>(
   retries = 3,
   delay = 1000
 ): Promise<T> => {
-  let lastError: Error
+  let lastError: Error | null = null
 
   for (let i = 0; i <= retries; i++) {
     try {
@@ -24,12 +24,14 @@ const apiCallWithRetry = async <T>(
 
       // 如果不是最后一次重试，则等待一段时间后重试
       if (i < retries) {
-        await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, i))) // 指数退避
+        await new Promise((resolve) => setTimeout(resolve, delay * Math.pow(2, i))) // 指数退避
       }
     }
   }
 
-  throw new Error(`API call failed after ${retries + 1} attempts: ${lastError?.message}`)
+  throw new Error(
+    `API call failed after ${retries + 1} attempts: ${lastError?.message || 'Unknown error'}`
+  )
 }
 
 /**

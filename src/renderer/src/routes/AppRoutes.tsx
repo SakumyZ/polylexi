@@ -8,7 +8,7 @@ const AppRoutesContent: React.FC = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const handleOpenSettings = (event: Electron.IpcRendererEvent) => {
+    const handleOpenSettings = () => {
       navigate('/settings')
     }
 
@@ -18,7 +18,7 @@ const AppRoutesContent: React.FC = () => {
 
     // 监听主进程发送的打开设置页面的消息
     const removeListener = window.electron.ipcRenderer.on('open-settings', handleOpenSettings)
-    
+
     // 监听自定义事件（从 App 组件发送）
     window.addEventListener('open-settings-route', handleOpenSettingsRoute)
 
