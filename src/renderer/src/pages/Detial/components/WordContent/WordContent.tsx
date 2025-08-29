@@ -49,7 +49,7 @@ const WordContent: React.FC<WordContentProps> = ({ data }) => {
                   // 复制到剪贴板
                   copy2Clipboard(item.word)
                   setCopySuccessed(true)
-                  setCopyedItemId(item.id.toString())
+                  setCopyedItemId(item.id?.toString() || '')
 
                   setTimeout(() => {
                     setCopySuccessed(false)
@@ -57,7 +57,7 @@ const WordContent: React.FC<WordContentProps> = ({ data }) => {
                 }}
               >
                 <span>{item.word}</span>
-                {copySuccessed && copyedItemId === item.id.toString() ? (
+                {copySuccessed && copyedItemId === (item.id?.toString() || '') ? (
                   <MdiCheckIcon />
                 ) : (
                   <MdiContentCopyIcon className="copy-icon" />

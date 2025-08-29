@@ -1,5 +1,6 @@
 // eslint-disable-next-line
 const Database = require('better-sqlite3')
+import { toCamelCase, toSnakeCase } from '@main/utils/namingConverter'
 
 /**
  * 初始化数据库
@@ -163,10 +164,14 @@ export const select = (tableName: string, params?: Record<string, unknown>): any
   let sql = ''
 
   if (params) {
-    sql = `SELECT * FROM ${tableName} WHERE ${Object.keys(params)
+    // 转换参数键名为下划线风格
+    const dbParams = toSnakeCase(params)
+    sql = `SELECT * FROM ${tableName} WHERE ${Object.keys(dbParams)
       .map((key) => {
         const res =
-          typeof params[key] === 'string' ? `${key}='${params[key]}'` : `${key}=${params[key]}`
+          typeof dbParams[key] === 'string'
+            ? `${key}='${dbParams[key]}'`
+            : `${key}=${dbParams[key]}`
         return res
       })
       .join(' AND ')}`
@@ -182,18 +187,25 @@ export const select = (tableName: string, params?: Record<string, unknown>): any
   const result = stmt.all()
   db.close()
 
-  return result
+  // 转换结果键名为驼峰风格
+  if (Array.isArray(result)) {
+    return result.map((item) => toCamelCase(item))
+  }
+  return toCamelCase(result)
 }
 
 export const insert = (
   tableName: string,
   params: Record<string, unknown>
 ): { lastInsertRowid: number; changes: number } => {
-  const sql = `INSERT INTO ${tableName} (${Object.keys(params).join(',')}) VALUES (${Object.keys(
-    params
+  // 转换参数键名为下划线风格
+  const dbParams = toSnakeCase(params)
+
+  const sql = `INSERT INTO ${tableName} (${Object.keys(dbParams).join(',')}) VALUES (${Object.keys(
+    dbParams
   )
     .map((key) => {
-      const value = params[key]
+      const value = dbParams[key]
 
       // 处理 null 值
       if (value === null || value === undefined) {
@@ -220,9 +232,13 @@ export const update = (
   params: Record<string, unknown>,
   where: Record<string, unknown>
 ): { changes: number } => {
-  const sql = `UPDATE ${tableName} SET ${Object.keys(params)
+  // 转换参数键名为下划线风格
+  const dbParams = toSnakeCase(params)
+  const dbWhere = toSnakeCase(where)
+
+  const sql = `UPDATE ${tableName} SET ${Object.keys(dbParams)
     .map((key) => {
-      const value = params[key]
+      const value = dbParams[key]
 
       // 处理 null 值
       if (value === null || value === undefined) {
@@ -237,9 +253,9 @@ export const update = (
       // 处理数字和其他值
       return `${key}=${value}`
     })
-    .join(',')} WHERE ${Object.keys(where)
+    .join(',')} WHERE ${Object.keys(dbWhere)
     .map((key) => {
-      const value = where[key]
+      const value = dbWhere[key]
 
       // 处理 null 值
       if (value === null || value === undefined) {
@@ -265,9 +281,12 @@ export const deleteRecord = (
   tableName: string,
   where: Record<string, unknown>
 ): { changes: number } => {
-  const sql = `DELETE FROM ${tableName} WHERE ${Object.keys(where)
+  // 转换参数键名为下划线风格
+  const dbWhere = toSnakeCase(where)
+
+  const sql = `DELETE FROM ${tableName} WHERE ${Object.keys(dbWhere)
     .map((key) => {
-      const value = where[key]
+      const value = dbWhere[key]
 
       // 处理 null 值
       if (value === null || value === undefined) {

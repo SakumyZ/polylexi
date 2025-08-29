@@ -21,9 +21,9 @@ const WordContentEdit: React.FC<WordContentEditProps> = ({
   onAfterEdit
 }) => {
   const langsOptions: WordOptions[] = [
-    { id: 1, lang: 'zh-CN', word: '', word_id: 0 },
-    { id: 2, lang: 'en-US', word: '', word_id: 0 },
-    { id: 3, lang: 'ja-JP', word: '', word_id: 0 }
+    { id: 1, lang: 'zh-CN', word: '', wordId: 0 },
+    { id: 2, lang: 'en-US', word: '', wordId: 0 },
+    { id: 3, lang: 'ja-JP', word: '', wordId: 0 }
   ]
   const [wordMap, setWordMap] = useState<WordMap>({})
 

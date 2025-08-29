@@ -7,7 +7,7 @@ interface WordDetailResponse {
   dictionary_id: number
   language_id: number
   lang: string
-  word_id: number
+  wordId: number
   word: string
   created_at: string
   updated_at: string
@@ -21,7 +21,7 @@ ipcMain.handle('getWordDetial', (_, payload: string): WordDetailResponse[] => {
 
   const res = select('words', {
     dictionary_id: dictionaryId,
-    word_id: wordId
+    wordId
   })
 
   return res
@@ -42,7 +42,7 @@ const addWord = (dictionaryId: string, wordMap: WordMap): string => {
     if (key === main) {
       const { lastInsertRowid } = insert('words', {
         dictionary_id: dictionaryId,
-        word_id: 0,
+        wordId: 0,
         word: wordMap[key].word,
         language_id: 1,
         lang: key
@@ -50,7 +50,7 @@ const addWord = (dictionaryId: string, wordMap: WordMap): string => {
 
       wordId = lastInsertRowid.toString()
 
-      update('words', { word_id: lastInsertRowid }, { id: lastInsertRowid })
+      update('words', { wordId: lastInsertRowid }, { id: lastInsertRowid })
 
       // 删除主语言
       wordKeys.splice(index, 1)
@@ -67,7 +67,7 @@ const addWord = (dictionaryId: string, wordMap: WordMap): string => {
   wordKeys.forEach((key) => {
     insert('words', {
       dictionary_id: dictionaryId,
-      word_id: wordId,
+      wordId,
       word: wordMap[key].word,
       language_id: wordMap[key].id,
       lang: key
@@ -150,7 +150,7 @@ ipcMain.handle('deleteWord', (_, payload: string): { success: boolean } => {
   // 删除该单词的所有语言版本
   deleteRecord('words', {
     dictionary_id: dictionaryId,
-    word_id: wordId
+    wordId
   })
 
   console.log(`delete ${dictionaryId}  ${wordId}`)

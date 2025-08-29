@@ -32,7 +32,7 @@ const WordSidebar: React.FC<WordSidebarProps> = ({
 
       // 只有在需要自动选择时才选择第一个单词
       if (autoSelect && res.length > 0) {
-        const firstWordId = res[0]?.['word_id']?.toString()
+        const firstWordId = res[0]?.wordId?.toString() || ''
         if (firstWordId) {
           setSelectedItemId(firstWordId)
           onClick(firstWordId)
@@ -59,7 +59,7 @@ const WordSidebar: React.FC<WordSidebarProps> = ({
         setWordList(res)
         // 如果有currentWordId且该单词仍在列表中，设置为选中状态
         if (currentWordId) {
-          const wordExists = res.some((item) => item.word_id.toString() === currentWordId)
+          const wordExists = res.some((item) => (item.wordId?.toString() || '') === currentWordId)
           if (wordExists) {
             setSelectedItemId(currentWordId)
           } else {
@@ -99,7 +99,7 @@ const WordSidebar: React.FC<WordSidebarProps> = ({
               key={uuid()}
               item={item}
               onClick={(wordId) => {
-                setSelectedItemId(wordId.toString())
+                setSelectedItemId(wordId)
                 onClick(wordId)
               }}
             >

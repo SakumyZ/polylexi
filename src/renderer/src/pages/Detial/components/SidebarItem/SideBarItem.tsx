@@ -10,13 +10,13 @@ interface SideBarItemProps {
 }
 
 const SideBarItem: React.FC<SideBarItemProps> = ({ selectedKey, item, children, onClick }) => {
-  const selectedClassName = selectedKey === item['word_id'].toString() ? 'selected' : ''
+  const selectedClassName = selectedKey === (item.wordId?.toString() || '') ? 'selected' : ''
 
   return (
     <div
       className={`sidebar-item ${selectedClassName}`}
       onClick={() => {
-        onClick?.(item['word_id'].toString())
+        onClick?.(item.wordId?.toString() || '')
       }}
     >
       {children}

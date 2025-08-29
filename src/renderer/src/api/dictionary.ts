@@ -9,7 +9,7 @@ export interface DictionaryOptions {
 export interface WordOptions {
   id: number
   word: string
-  word_id: number
+  wordId: number
   lang: string
 }
 
