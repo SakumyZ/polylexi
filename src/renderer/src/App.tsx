@@ -3,6 +3,7 @@ import './App.css'
 import AppRoutes from './routes/AppRoutes'
 import { DialogProvider } from './components/Dialog/DialogProvider'
 import { LanguageProvider } from './contexts/LanguageContext'
+import ErrorBoundary from './components/ErrorBoundary'
 
 function App() {
   // 监听从主进程发送的打开设置页面的消息
@@ -21,11 +22,13 @@ function App() {
   }, [])
 
   return (
-    <LanguageProvider>
-      <DialogProvider>
-        <AppRoutes />
-      </DialogProvider>
-    </LanguageProvider>
+    <ErrorBoundary>
+      <LanguageProvider>
+        <DialogProvider>
+          <AppRoutes />
+        </DialogProvider>
+      </LanguageProvider>
+    </ErrorBoundary>
   )
 }
 
