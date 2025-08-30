@@ -28,8 +28,6 @@ ipcMain.handle('getWordDetial', (_, payload: string): WordDetailResponse[] => {
 })
 
 const addWord = (dictionaryId: string, wordMap: WordMap): string => {
-  console.log('🚀 ~ addWord ~ wordMap:', wordMap)
-  console.log('🚀 ~ addWord ~ dictionaryId:', dictionaryId)
   const main = 'zh-CN'
 
   const wordKeys = Object.keys(wordMap)
@@ -82,7 +80,6 @@ ipcMain.handle('addWord', (_, payload: string) => {
     dictionaryId: string
     wordMap: WordMap
   }
-  console.log('🚀 ~ addWord:', dictionaryId, wordMap)
 
   const wordId = addWord(dictionaryId, wordMap)
   return wordId
@@ -120,9 +117,7 @@ export const importWords = (wordList: Record<string, string>[]) => {
 }
 
 ipcMain.handle('updateWord', (_, payload: string): { success: boolean } => {
-  console.log('🚀 ~ updateWord:')
-
-  const { dictionaryId, wordMap } = JSON.parse(payload) as {
+  const { wordMap } = JSON.parse(payload) as {
     dictionaryId: string
     wordMap: WordMap
   }
@@ -135,7 +130,6 @@ ipcMain.handle('updateWord', (_, payload: string): { success: boolean } => {
     }
   }
 
-  console.log(dictionaryId, wordMap)
   return { success: true }
 })
 
@@ -145,14 +139,11 @@ ipcMain.handle('deleteWord', (_, payload: string): { success: boolean } => {
     wordId: string
   }
 
-  console.log('🚀 ~ deleteWord:', dictionaryId, wordId)
-
   // 删除该单词的所有语言版本
   deleteRecord('words', {
     dictionary_id: dictionaryId,
     wordId
   })
 
-  console.log(`delete ${dictionaryId}  ${wordId}`)
   return { success: true }
 })

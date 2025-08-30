@@ -5,6 +5,7 @@ import icon from '../../resources/icon.png?asset'
 import createAppMenu from './electron/menu'
 import { initDB } from './electron/db'
 import '@main/api/'
+import logger from './utils/logger'
 
 function createWindow(): void {
   // Create the browser window.
@@ -59,7 +60,7 @@ app.whenReady().then(() => {
   })
 
   // IPC test
-  ipcMain.on('ping', () => console.log('pong'))
+  ipcMain.on('ping', () => logger.debug('pong'))
 
   createWindow()
 

@@ -1,6 +1,7 @@
 import { Menu, MenuItemConstructorOptions, dialog, BrowserWindow } from 'electron'
 import fs from 'node:fs'
 import { importWords } from '@main/api/word'
+import logger from '@main/utils/logger'
 
 const menuTemplate: MenuItemConstructorOptions[] = [
   {
@@ -26,7 +27,7 @@ const menuTemplate: MenuItemConstructorOptions[] = [
                 // 读取文件内容
                 fs.readFile(filePath, 'utf-8', (err, data) => {
                   if (err) {
-                    console.error(err)
+                    logger.error(err)
                     return
                   }
 
@@ -42,7 +43,7 @@ const menuTemplate: MenuItemConstructorOptions[] = [
       {
         label: '导出词典',
         click() {
-          console.log('导出词典')
+          logger.debug('导出词典')
         },
         accelerator: 'Alt+O'
       }
@@ -75,7 +76,7 @@ const menuTemplate: MenuItemConstructorOptions[] = [
       {
         label: '关于',
         click() {
-          console.log('关于应用')
+          logger.debug('关于应用')
         }
       }
     ]

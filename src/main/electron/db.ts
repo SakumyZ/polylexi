@@ -1,6 +1,7 @@
 // eslint-disable-next-line
 const Database = require('better-sqlite3')
 import { toCamelCase, toSnakeCase } from '@main/utils/namingConverter'
+import logger from '@main/utils/logger'
 
 /**
  * 初始化数据库
@@ -45,7 +46,7 @@ export const initDB = () => {
     }
   } catch {
     // 如果检查失败，说明是全新数据库，无需迁移
-    console.log('Database is new, no migration needed')
+    logger.info('Database is new, no migration needed')
   }
 
   db.exec(`
@@ -166,7 +167,7 @@ export const select = (tableName: string, params?: Record<string, unknown>): any
   if (params) {
     // 转换参数键名为下划线风格
     const dbParams = toSnakeCase(params)
-    sql = `SELECT * FROM ${tableName} WHERE ${Object.keys(dbParams)
+    sql = `SELECT * FROM ${tableName.toUpperCase()} WHERE ${Object.keys(dbParams)
       .map((key) => {
         const res =
           typeof dbParams[key] === 'string'
@@ -176,10 +177,10 @@ export const select = (tableName: string, params?: Record<string, unknown>): any
       })
       .join(' AND ')}`
   } else {
-    sql = `SELECT * FROM ${tableName}`
+    sql = `SELECT * FROM ${tableName.toUpperCase()}`
   }
 
-  console.log(sql)
+  logger.debug(sql)
 
   const db = new Database('data.db')
   const stmt = db.prepare(sql)
@@ -201,7 +202,7 @@ export const insert = (
   // 转换参数键名为下划线风格
   const dbParams = toSnakeCase(params)
 
-  const sql = `INSERT INTO ${tableName} (${Object.keys(dbParams).join(',')}) VALUES (${Object.keys(
+  const sql = `INSERT INTO ${tableName.toUpperCase()} (${Object.keys(dbParams).join(',')}) VALUES (${Object.keys(
     dbParams
   )
     .map((key) => {
@@ -222,7 +223,7 @@ export const insert = (
     })
     .join(',')})`
 
-  console.log(sql)
+  logger.debug(sql)
 
   return exec(sql)
 }
@@ -236,7 +237,7 @@ export const update = (
   const dbParams = toSnakeCase(params)
   const dbWhere = toSnakeCase(where)
 
-  const sql = `UPDATE ${tableName} SET ${Object.keys(dbParams)
+  const sql = `UPDATE ${tableName.toUpperCase()} SET ${Object.keys(dbParams)
     .map((key) => {
       const value = dbParams[key]
 
@@ -272,7 +273,7 @@ export const update = (
     })
     .join(' AND ')}`
 
-  console.log(sql)
+  logger.debug(sql)
 
   return exec(sql)
 }
@@ -284,7 +285,7 @@ export const deleteRecord = (
   // 转换参数键名为下划线风格
   const dbWhere = toSnakeCase(where)
 
-  const sql = `DELETE FROM ${tableName} WHERE ${Object.keys(dbWhere)
+  const sql = `DELETE FROM ${tableName.toUpperCase()} WHERE ${Object.keys(dbWhere)
     .map((key) => {
       const value = dbWhere[key]
 
@@ -303,7 +304,7 @@ export const deleteRecord = (
     })
     .join(' AND ')}`
 
-  console.log(sql)
+  logger.debug(sql)
 
   return exec(sql)
 }
